@@ -1,39 +1,37 @@
 package ru.const24.globalmarket;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import ru.const24.globalmarket.model.Currency;
-import ru.const24.globalmarket.model.CurrencyNominal;
 import ru.const24.globalmarket.model.Money;
 import ru.const24.globalmarket.service.CurrencyService;
-import ru.const24.globalmarket.service.FileDataSource;
-import ru.const24.globalmarket.service.Forge1DataSource;
 
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Hello world!
- *
+ * Клиентское приложение
  */
-public class App 
-{
-    public static void main( String[] args ) throws Exception {
+public class App {
+    public static void main(String[] args) throws Exception {
 
-
+        //получаем абсолютный путь текущей дирректории
         String currentFilePath = Paths.get("").toAbsolutePath().toString();
+
+        //создаем сервис по работе с валютой
         CurrencyService currencyService = new CurrencyService(currentFilePath);
 
-        Money myProduct = new Money(1, Currency.USD);
+        Money myMoney = new Money(1, Currency.USD);
 
+        //берем текущую датту
         LocalDate localDate = LocalDate.now();
+        //преобразуем дату в строку для удобства вывода
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateString = localDate.format(dateTimeFormatter);
 
-        Money exchangedMoney = currencyService.exchangeMoneyСurrencyByDate(myProduct, Currency.RUB, localDate);
+        //конвертируем деньги в другую валюту
+        Money exchangedMoney = currencyService.exchangeMoneyСurrencyByDate(myMoney, Currency.RUB, localDate);
 
-
+        //выводим результат на экра
         System.out.println("Date: " + dateString + " product costs: " + exchangedMoney);
-
     }
 }
