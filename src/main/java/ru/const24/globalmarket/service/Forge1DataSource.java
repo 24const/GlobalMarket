@@ -33,6 +33,8 @@ public class Forge1DataSource implements CurrencyDataSource {
     private static final String USDUER_PAIR_SYMBOL = "USDEUR";
 
     public CurrencyNominal getCurrencyNominalByDate(LocalDate date) throws UnirestException {
+        System.out.println("Получаем информацию о валюте из Forge1");
+
         JsonNode jsonNode = Unirest.get(API_URL).asJson().getBody();
 
         Forge1Response response = parseJsonResponse(jsonNode);

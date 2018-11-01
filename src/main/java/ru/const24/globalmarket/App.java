@@ -1,12 +1,16 @@
 package ru.const24.globalmarket;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import ru.const24.globalmarket.model.Currency;
 import ru.const24.globalmarket.model.CurrencyNominal;
+import ru.const24.globalmarket.model.Money;
+import ru.const24.globalmarket.service.CurrencyService;
 import ru.const24.globalmarket.service.FileDataSource;
 import ru.const24.globalmarket.service.Forge1DataSource;
 
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Hello world!
@@ -16,18 +20,20 @@ public class App
 {
     public static void main( String[] args ) throws Exception {
 
-        Forge1DataSource forge1DataSource = new Forge1DataSource();
-        CurrencyNominal forge1Nominal = forge1DataSource.getCurrencyNominalByDate(LocalDate.now());
 
         String currentFilePath = Paths.get("").toAbsolutePath().toString();
+        CurrencyService currencyService = new CurrencyService(currentFilePath);
 
-        System.out.println("currentFilePath: " + currentFilePath);
-        FileDataSource fileDataSource = new FileDataSource(currentFilePath);
+        Money myProduct = new Money(1, Currency.USD);
 
-        CurrencyNominal fileNominal = fileDataSource.getCurrencyNominalByDate(LocalDate.now());
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dateString = localDate.format(dateTimeFormatter);
 
-        System.out.println("forge1Nominal: " + forge1Nominal);
-        System.out.println("fileNominal: " + fileNominal);
+        Money exchangedMoney = currencyService.exchangeMoneyСurrencyByDate(myProduct, Currency.RUB, localDate);
+
+
+        System.out.println("Date: " + dateString + " product costs: " + exchangedMoney);
 
     }
 }
